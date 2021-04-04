@@ -128,6 +128,8 @@ func (t *articlesHttpTransport) setupRoutes(r *mux.Router) *mux.Router {
 	r.HandleFunc("", t.addArticle).Methods("PUT")
 	r.HandleFunc("", t.articles).Methods("GET")
 	r.HandleFunc("/{id}", t.updateArticle).Methods("PUT")
+	r.HandleFunc("/{id}", t.articleByID).Methods("GET")
+	r.HandleFunc("/{id}", t.deleteArticle).Methods("DELETE")
 	return r
 }
 
@@ -198,6 +200,14 @@ func (t *articlesHttpTransport) articles(w http.ResponseWriter, r *http.Request)
 		}
 		return
 	}
+}
+
+func (t *articlesHttpTransport) articleByID(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func (t *articlesHttpTransport) deleteArticle(w http.ResponseWriter, r *http.Request) {
+
 }
 
 func main() {
