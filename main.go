@@ -212,22 +212,19 @@ func (t *articlesHttpTransport) deleteArticle(w http.ResponseWriter, r *http.Req
 
 func main() {
 	var (
+		rootRouter        = mux.NewRouter()
 		repo              = newInMemoryRepo()
 		svc               = newArticleSvc(repo)
 		articlesTransport = newArticlesHttpTransport(svc)
 	)
 
-	rootRouter := mux.NewRouter()
+	articlesTransport.setupRoutes(rootRouter.PathPrefix("/articles").Subrouter())
 
-	articlesRouter := rootRouter.PathPrefix("/articles").Subrouter()
-	rootRouter.Handle("/articles", articlesTransport.setupRoutes(articlesRouter))
 	rootRouter.HandleFunc("/", func(w http.ResponseWriter, request *http.Request) {
 		w.Write([]byte("Hello Ghochu!"))
 	})
 
-	http.Handle("/", rootRouter)
-
-	if err := http.ListenAndServe(":8888", nil); err != nil {
+	if err := http.ListenAndServe(":8888", rootRouter); err != nil {
 		log.Println(err)
 	}
 }
